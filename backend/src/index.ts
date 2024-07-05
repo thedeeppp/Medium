@@ -8,10 +8,11 @@ const app = new Hono<{
 	Bindings: {
 		DATABASE_URL: string,
 		JWT_SECRET: string,
+		c:string
 	}
 }>();
 
-app.use('/api/v1/blog/*', async (c, next) => {
+app.use('/api/v1/blog/*', async (c: { req: { header: (arg0: string) => any; }; status: (arg0: number) => void; json: (arg0: { error: string; }) => any; env: { JWT_SECRET: any; }; set: (arg0: string, arg1: any) => void; }, next: () => any) => {
 	const jwt = c.req.header('Authorization');
 	if (!jwt) {
 		c.status(401);
@@ -27,7 +28,7 @@ app.use('/api/v1/blog/*', async (c, next) => {
 	await next()
 })
 
-app.post('/api/v1/signup', async (c) => {
+app.post('/api/v1/signup', async (c: { env: { DATABASE_URL: any; JWT_SECRET: any; }; req: { json: () => any; }; json: (arg0: { jwt?: any; error?: string; }) => any; status: (arg0: number) => void; }) => {
 	const prisma = new PrismaClient({
 		datasourceUrl: c.env.DATABASE_URL	,
 	}).$extends(withAccelerate());
@@ -48,7 +49,7 @@ app.post('/api/v1/signup', async (c) => {
 	}
 })
 
-app.post('/api/v1/user/signup', async(c) => {
+app.post('/api/v1/user/signup', async(c: { env: { DATABASE_URL: any; JWT_SECRET: any; }; req: { json: () => any; }; status: (arg0: number) => void; json: (arg0: { error?: string; jwt?: any; }) => any; }) => {
   const prisma = new PrismaClient({
 		datasourceUrl: c.env.DATABASE_URL	,
 	}).$extends(withAccelerate());
@@ -68,19 +69,19 @@ app.post('/api/v1/user/signup', async(c) => {
 })
 
 
-app.post('/api/v1/blog', (c) => {
+app.post('/api/v1/blog', (c: { text: (arg0: string) => any; }) => {
   return c.text('Hello Hono!')
 })
 
-app.put('/api/v1/blog', (c) => {
+app.put('/api/v1/blog', (c: { text: (arg0: string) => any; }) => {
   return c.text('Hello Hono!')
 })
 
-app.get('/api/v1/blog/:id', (c) => {
+app.get('/api/v1/blog/:id', (c: { text: (arg0: string) => any; }) => {
   return c.text('Hello Hono!')
 })
 
-app.get('/api/v1/blog/bulk', (c) => {
+app.get('/api/v1/blog/bulk', (c: { text: (arg0: string) => any; }) => {
   return c.text('Hello Hono!')
 })
 
